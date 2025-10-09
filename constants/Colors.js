@@ -9,6 +9,7 @@ export const Colors = {
     tint: "#fff",
     tabIconDefault: "#ccc",
     tabIconSelected: "#fff",
+    navBackground: "#161b22",
   },
 
   light: {
@@ -18,5 +19,6 @@ export const Colors = {
     tint: "#2f95dc",
     tabIconDefault: "#ccc",
     tabIconSelected: "#2f95dc",
+    navBackground: "#fff",
   },
 };
