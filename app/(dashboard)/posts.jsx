@@ -7,14 +7,16 @@ import Spacer from "../../components/Spacer";
 
 const Posts = () => {
   const { posts } = usePosts();
-  console.log("posts", posts);
+  const sortedPosts = posts.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
   return (
     <ThemedView safe={true} style={styles.container}>
       <ThemedText style={styles.title}>Posts Page</ThemedText>
       <FlatList
         style={{ marginTop: 20 }}
         contentContainerStyle={styles.list}
-        data={posts}
+        data={sortedPosts}
         renderItem={({ item }) => (
           <Pressable onPress={() => console.log(item)}>
             <ThemedCard>

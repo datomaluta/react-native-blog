@@ -54,13 +54,12 @@ const Create = () => {
             style={{ height: 150 }}
           />
           <Spacer />
-          <ThemedButton>
+          <ThemedButton onPress={addHandle}>
             <Text
               style={{
                 color: "white",
                 textAlign: "center",
               }}
-              onPress={addHandle}
             >
               Add
             </Text>

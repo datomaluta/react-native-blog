@@ -13,6 +13,7 @@ export function PostsProvider({ children }) {
   async function getPosts() {
     try {
       const posts = JSON.parse(await AsyncStorage.getItem("posts")) || [];
+
       setPosts(posts);
     } catch (error) {
       throw Error(error.message);
@@ -27,6 +28,7 @@ export function PostsProvider({ children }) {
         author: user.email,
         title,
         body,
+        createdAt: Date.now(),
       };
       const newPosts = [...posts, newPost];
 
@@ -39,8 +41,18 @@ export function PostsProvider({ children }) {
     }
   }
 
+  async function clearPosts() {
+    try {
+      await AsyncStorage.removeItem("posts");
+      setPosts([]);
+    } catch (error) {
+      throw Error(error.message);
+    }
+  }
+
   useEffect(() => {
     getPosts();
+    // clearPosts();
   }, []);
 
   return (

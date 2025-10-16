@@ -76,6 +76,7 @@ export function UserProvider({ children }) {
     getInitialUserValue();
   }, []);
 
+
   return (
     <UserContext.Provider
       value={{

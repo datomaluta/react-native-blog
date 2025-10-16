@@ -4,9 +4,11 @@ import ThemedView from "../components/ThemedView";
 import ThemedText from "../components/ThemedText";
 import { useUser } from "../hooks/useUser";
 import Spacer from "../components/Spacer";
+import { useEffect } from "react";
 
 const Home = () => {
   const { user } = useUser();
+
   return (
     <>
       <ThemedView style={styles.container}>
