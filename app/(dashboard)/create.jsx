@@ -10,7 +10,7 @@ import {
 import ThemedView from "../../components/ThemedView";
 import ThemedText from "../../components/ThemedText";
 import ThemedInput from "../../components/ThemedInput";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Spacer from "../../components/Spacer";
 import ThemedButton from "../../components/ThemedButton";
 import { usePosts } from "../../hooks/usePosts";
@@ -18,18 +18,23 @@ import { usePosts } from "../../hooks/usePosts";
 const Create = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const titleRef = useRef(null);
 
   const { createPost } = usePosts();
 
   const addHandle = async () => {
-    console.log(title, body);
-
     try {
       await createPost(title, body);
+      setTitle("");
+      setBody("");
     } catch (error) {
       console.log(error);
     }
   };
+
+  // useEffect(() => {
+  //   titleRef.current?.focus();
+  // }, []);
 
   return (
     <KeyboardAvoidingView
@@ -44,6 +49,7 @@ const Create = () => {
             placeholder="Title"
             onChangeText={setTitle}
             value={title}
+            ref={titleRef}
           />
           <Spacer />
           <ThemedInput

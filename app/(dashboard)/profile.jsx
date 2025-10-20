@@ -1,4 +1,4 @@
-import { Text, StyleSheet, FlatList, Pressable } from "react-native";
+import { Text, StyleSheet, FlatList, Pressable, View } from "react-native";
 import { useUser } from "../../hooks/useUser";
 import ThemedButton from "../../components/ThemedButton";
 import ThemedView from "../../components/ThemedView";
@@ -6,8 +6,11 @@ import ThemedText from "../../components/ThemedText";
 import Spacer from "../../components/Spacer";
 import { usePosts } from "../../hooks/usePosts";
 import ThemedCard from "../../components/ThemedCard";
+import { getHumanReadableDateFromTimeStamp } from "../../helpers/date";
+import { useRouter } from "expo-router";
 
 const Profile = () => {
+  const router = useRouter();
   const { logout, user } = useUser();
   const { posts } = usePosts();
 
@@ -18,6 +21,10 @@ const Profile = () => {
       setError(error.message);
     }
   };
+
+  const sortedPosts = posts?.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
 
   return (
     <ThemedView safe={true} style={styles.container}>
@@ -38,15 +45,20 @@ const Profile = () => {
       <FlatList
         style={{ marginTop: 20 }}
         contentContainerStyle={styles.list}
-        data={posts?.filter((item) => item.author === user?.email)}
+        data={sortedPosts?.filter((item) => item.author === user?.email)}
         renderItem={({ item }) => (
-          <Pressable onPress={() => console.log(item)}>
+          <Pressable onPress={() => router.push(`/posts/${item.id}`)}>
             <ThemedCard>
               <ThemedText>{item.title}</ThemedText>
-              <Spacer height={10} />
-              <ThemedText style={{ fontSize: 12, marginLeft: "auto" }}>
-                Written by {item.author}
-              </ThemedText>
+              <Spacer height={20} />
+              <View style={{ flexDirection: "row" }}>
+                <ThemedText style={{ fontSize: 12 }}>
+                  {getHumanReadableDateFromTimeStamp(item.createdAt)}
+                </ThemedText>
+                <ThemedText style={{ fontSize: 12, marginLeft: "auto" }}>
+                  {item.author}
+                </ThemedText>
+              </View>
             </ThemedCard>
           </Pressable>
         )}

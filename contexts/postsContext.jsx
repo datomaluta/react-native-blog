@@ -20,6 +20,17 @@ export function PostsProvider({ children }) {
     }
   }
 
+  async function getPostById(id) {
+    try {
+      const posts = JSON.parse(await AsyncStorage.getItem("posts")) || [];
+      const post = posts.find((post) => post.id === id);
+
+      return post;
+    } catch (error) {
+      throw Error(error.message);
+    }
+  }
+
   async function createPost(title, body) {
     try {
       const posts = JSON.parse(await AsyncStorage.getItem("posts")) || [];
@@ -35,7 +46,18 @@ export function PostsProvider({ children }) {
       await AsyncStorage.setItem("posts", JSON.stringify(newPosts));
       setPosts(newPosts);
 
-      router.push("/posts");
+      router.replace("/posts");
+    } catch (error) {
+      throw Error(error.message);
+    }
+  }
+
+  async function deletePost(id) {
+    try {
+      const posts = JSON.parse(await AsyncStorage.getItem("posts")) || [];
+      const newPosts = posts.filter((post) => post.id !== id);
+      await AsyncStorage.setItem("posts", JSON.stringify(newPosts));
+      setPosts(newPosts);
     } catch (error) {
       throw Error(error.message);
     }
@@ -56,7 +78,9 @@ export function PostsProvider({ children }) {
   }, []);
 
   return (
-    <PostsContext.Provider value={{ posts, createPost }}>
+    <PostsContext.Provider
+      value={{ posts, createPost, getPostById, deletePost }}
+    >
       {children}
     </PostsContext.Provider>
   );

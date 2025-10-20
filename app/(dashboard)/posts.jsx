@@ -4,12 +4,16 @@ import { usePosts } from "../../hooks/usePosts";
 import ThemedText from "../../components/ThemedText";
 import ThemedCard from "../../components/ThemedCard";
 import Spacer from "../../components/Spacer";
+import { getHumanReadableDateFromTimeStamp } from "../../helpers/date";
+import { useRouter } from "expo-router";
 
 const Posts = () => {
+  const router = useRouter();
   const { posts } = usePosts();
   const sortedPosts = posts.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
+
   return (
     <ThemedView safe={true} style={styles.container}>
       <ThemedText style={styles.title}>Posts Page</ThemedText>
@@ -18,13 +22,18 @@ const Posts = () => {
         contentContainerStyle={styles.list}
         data={sortedPosts}
         renderItem={({ item }) => (
-          <Pressable onPress={() => console.log(item)}>
+          <Pressable onPress={() => router.push(`/posts/${item.id}`)}>
             <ThemedCard>
               <ThemedText>{item.title}</ThemedText>
-              <Spacer height={10} />
-              <ThemedText style={{ fontSize: 12, marginLeft: "auto" }}>
-                Written by {item.author}
-              </ThemedText>
+              <Spacer height={20} />
+              <View style={{ flexDirection: "row" }}>
+                <ThemedText style={{ fontSize: 12 }}>
+                  {getHumanReadableDateFromTimeStamp(item.createdAt)}
+                </ThemedText>
+                <ThemedText style={{ fontSize: 12, marginLeft: "auto" }}>
+                  {item.author}
+                </ThemedText>
+              </View>
             </ThemedCard>
           </Pressable>
         )}
